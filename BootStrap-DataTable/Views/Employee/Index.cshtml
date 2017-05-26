@@ -1,0 +1,95 @@
+﻿@using BootStrap_DataTable.Models;
+@model IEnumerable<EmployeeView>
+@{
+    ViewBag.Title = "Index";
+}
+
+<h2>Index</h2>
+<table id="employees" class="table table-striped table-hover compact">
+    <thead>
+        <tr>
+            <th>
+                @Html.DisplayNameFor(model => model.FirstName)
+            </th>
+            <th>
+                @Html.DisplayNameFor(model => model.City)
+            </th>
+            @*<th>
+                @Html.DisplayNameFor(model => model.State)
+            </th>*@
+            <th>
+                @Html.DisplayNameFor(model => model.Email)
+            </th>
+            <th></th>
+        </tr>
+        <tr id="dt_search">
+            <th>
+                @Html.Editor("search_name", new { htmlAttributes = new { @id = "FirstName", @class = "form-control input-sm", @placeHolder = "Search First Name" } })
+            </th>
+            <th>
+                @Html.Editor("search_city", new { htmlAttributes = new { @id = "City", @class = "form-control input-sm", @placeHolder = "Search City" } })
+            </th>
+            @*<th>
+                @Html.DropDownList("search_state", (IEnumerable<SelectListItem>)ViewBag.States, "Search State", new { @id = "State", @class = "form-control input-sm", @placeHolder = "Search State" })
+            </th>*@
+            <th>
+                @Html.Editor("search_email", new { htmlAttributes = new { @id = "Email", @class = "form-control input-sm", @placeHolder = "Search Email Address" } })
+            </th>
+            <th></th>
+        </tr>
+    </thead>
+</table>
+@section scripts {
+    <script type="text/javascript">
+        function partInit() {
+            var cols = [
+                {
+                    'sName': 'FirstName',
+                    'bSearchable': true,
+                    'bSortable': true,
+                    'data': 'FirstName',
+                    'isFilterable': true
+                },
+                {
+                    'sName': 'City',
+                    'bSearchable': true,
+                    'bSortable': true,
+                    'data': 'City',
+                    'isFilterable': true
+                },
+                {
+                    'sName': 'Email',
+                    'bSearchable': true,
+                    'bSortable': true,
+                    'data': 'Email',
+                    'isFilterable': true
+                },
+                //{
+                //    'sName': 'Modified',
+                //    'bSearchable': true,
+                //    'bSortable': true,
+                //    'data': function (data) {
+                //        if (data) {
+                //            return moment(data.Modified).format('MM-DD-YYYY');
+                //        } else return 'Modified';
+                //    },
+                //    'isFilterable': true
+                //},
+                {
+                    'sName': '',
+                    'bSearchable': false,
+                    'bSortable': false,
+                    'data': function (data) {
+                        var fnCall = 'BootStrapDataTable.Employee.ShowEmployeeDetails(\'' + data.Id + '\');';
+
+                        var sBtnEdit = '<button type=\"button\" class=\"btn btn-sm btn-primary custom\" onclick=\"' + fnCall + '\">Details</button>';
+                        return '<div style="white-space:nowrap">' + sBtnEdit + '&nbsp;</div>';
+                    },
+                    'isFilterable': false
+                }
+            ];
+            App.Common.LoadDatatableFromAjax('employees', '/Employee/GetEmployees', cols);
+        }
+        partInit();
+    </script>
+    }
